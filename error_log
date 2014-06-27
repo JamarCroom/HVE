@@ -1,0 +1,1 @@
+[15-Apr-2014 11:11:39] PHP Warning:  Missing argument 2 for Validation::validAlphaNum(), called in /home/a7641088/public_html/addUser.php on line 22 and defined in /home/a7641088/public_html/objects/Validation.php on line 156
