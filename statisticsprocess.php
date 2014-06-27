@@ -292,9 +292,9 @@ $showForm=false;
 					$totalDepartmentStopsquery="SELECT reportTable.department as department , SUM(totalStops) as totalDepartmentStops FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY department ORDER BY department";
 					$departmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY reportTable.department,officerDetailsTable.officerName ORDER BY reportTable.department";
 					$totalDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY reportTable.department ORDER BY reportTable.department, reportTable.detailDate";
-					$singleDepartmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, officerDetailsTable.officerHours as officerHours, detailDate FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department  ORDER BY reportTable.detailDate";
-					$singleDepartmentDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department ORDER BY reportTable.detailDate";
-					$singleDepartmentStopsquery="SELECT reportTable.department as department , SUM(totalStops) as totalDepartmentStops FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department=:department ORDER BY department";
+					$singleDepartmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, officerDetailsTable.officerHours as officerHours, detailDate FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department";
+					$singleDepartmentDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department";
+					$singleDepartmentStopsquery="SELECT reportTable.department as department , SUM(totalStops) as totalDepartmentStops FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department=:department";
 
 					switch($choice)
 					{
@@ -321,7 +321,7 @@ $showForm=false;
 							$statement3=$db->prepare($singleDepartmentStopsquery);
 							$statement3->bindValue(':startDate',$startDate);
 							$statement3->bindValue(':endDate',$endDate);
-							$statement3->bindValue(':department',$department);
+							$statement3->bindValue(':department',$_POST['department']);
 							$statement3->execute();
 							$totalDepartmentResult=$statement3->fetchAll();
 
@@ -331,14 +331,14 @@ $showForm=false;
 							
 							$statement4->bindValue(':startDate',$startDate);
 							$statement4->bindValue(':endDate',$endDate);
-							$statement4->bindValue(':department',$department);
+							$statement4->bindValue(':department',$_POST['department']);
 							$statement4->execute();
 							$departmentResult=$statement4->fetchAll();
 
 							$statement5=$db->prepare($singleDepartmentDetailHours);
 							$statement5->bindValue(':startDate',$startDate);
 							$statement5->bindValue(':endDate',$endDate);
-							$statement5->bindValue(':department',$department);
+							$statement5->bindValue(':department',$_POST['department']);
 							$statement5->execute();
 							$totalDetailHoursResult=$statement5->fetchAll();
 							$selection = str_ireplace("?", "'", $_POST['department']); 
@@ -474,7 +474,7 @@ $showForm=false;
 				}
 
 				
-				if($choice=='final'||$choice=='department')
+				if($choice=='final')
 				{
 						$policeDept=array();
 						$file = file_get_contents('Maine_PD_List.txt');
@@ -534,8 +534,47 @@ $showForm=false;
 
 
 					}
-					
 				}
+					if($choice=='department')
+					{
+						
+						echo "<h3 style='margin-top:50px;'><strong>Department Details</strong></h3><br/>";
+
+						foreach($totalDepartmentResult as $totalDepartmentResults)
+						{
+						
+								echo"<p><strong>Department:&nbsp;&nbsp;</strong>".trim(str_ireplace("?", "'",$totalDepartmentResults['department']))."</p>";
+								echo "<p><strong>Total number of stops:&nbsp;&nbsp;</strong>".$totalDepartmentResults['totalDepartmentStops']."</p>";
+								echo"<br/><h4>Officer Details</h4>";
+								echo"<table style='margin: 5px 0px 15px 30px;'><thead><tr><th>Officer Name</th><th>Department</th><th>Total<br/>Officer Hours</th><th>Detail Date</th></tr></thead>";
+			
+						}
+
+					
+						foreach($departmentResult as $departmentResults)
+						{
+					
+
+									echo "<tr><td>".$departmentResults['officerName']."</td><td>".trim(str_ireplace("?", "'",$departmentResults['department']))."</td><td>".$departmentResults['officerHours']."</td><td>".$departmentResults['officerHours']."</td></tr>";
+								
+						}
+		
+									echo"</table>";
+			
+					
+						foreach($totalDetailHoursResult as $totalDetailHoursResults)
+						{
+		
+									echo"<p><strong>Total number of detail hours:</strong> ".$totalDetailHoursResults['officerHours']."</p><br/><br/><br/><br/><br/>";
+	
+						}
+
+
+
+
+					}
+					
+				
 
 				echo"</div>";
 

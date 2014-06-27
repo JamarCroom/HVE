@@ -455,6 +455,9 @@ p
 	margin-bottom: 8px;
 	margin-left:6px;
 }
+
+
+
 table tr td input
 {
 	margin-bottom: 8px;
@@ -465,6 +468,13 @@ table tr td
 	margin-bottom: 8px;
 	padding-left: 6px;
 }
+
+#violations tr td
+ {
+ 
+ 	padding-bottom: 15px;
+ }
+
 legend
 {
 	font-weight: bold;	
@@ -508,6 +518,7 @@ legend
  	}
 
  }
+
 
 </style>
 

@@ -349,6 +349,11 @@ legend
 	margin: 20px auto;
 }
 
+#violations tr td
+ {
+
+ 	padding-bottom: 15px;
+ }
 
 @media (max-width: 480px)
  {
