@@ -290,10 +290,10 @@ $showForm=false;
 						  FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate";
 					$query2="SELECT COUNT(officerDetailsTable.officerName) as officerNameCount, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate";
 					$totalDepartmentStopsquery="SELECT reportTable.department as department , SUM(totalStops) as totalDepartmentStops FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY department ORDER BY department";
-					$departmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY reportTable.department,officerDetailsTable.officerName ORDER BY reportTable.department";
+					$departmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, SUM(officerDetailsTable.officerHours) as officerHours, reportTable.detailDate as detailDate FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY reportTable.department,officerDetailsTable.officerName ORDER BY reportTable.department";
 					$totalDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate GROUP BY reportTable.department ORDER BY reportTable.department, reportTable.detailDate";
 					$singleDepartmentOfficerDetails="SELECT reportTable.department as department, officerDetailsTable.officerName, officerDetailsTable.officerHours as officerHours, detailDate FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department";
-					$singleDepartmentDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department";
+					$singleDepartmentDetailHours="SELECT reportTable.department, SUM(officerDetailsTable.officerHours) as officerHours, reportTable.detailDate as detailDate FROM officerDetailsTable JOIN reportTable ON officerDetailsTable.rptId= reportTable.rptId WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department =:department";
 					$singleDepartmentStopsquery="SELECT reportTable.department as department , SUM(totalStops) as totalDepartmentStops FROM reportTable WHERE approvalStatus='approved' AND dateSubmit >=:startDate AND dateSubmit <=:endDate AND department=:department";
 
 					switch($choice)
@@ -509,7 +509,7 @@ $showForm=false;
 								if(trim(str_ireplace("'", "?", $policeDepts)) == trim($departmentResults['department']))
 								{
 
-									echo "<tr><td>".$departmentResults['officerName']."</td><td>".trim(str_ireplace("?", "'",$departmentResults['department']))."</td><td>".$departmentResults['officerHours']."</td><td>".$departmentResults['officerHours']."</td></tr>";
+									echo "<tr><td>".$departmentResults['officerName']."</td><td>".trim(str_ireplace("?", "'",$departmentResults['department']))."</td><td>".$departmentResults['officerHours']."</td><td>".$departmentResults['detailDate']."</td></tr>";
 								}
 						}
 						foreach($departmentResult as $departmentResults)
@@ -555,7 +555,7 @@ $showForm=false;
 						{
 					
 
-									echo "<tr><td>".$departmentResults['officerName']."</td><td>".trim(str_ireplace("?", "'",$departmentResults['department']))."</td><td>".$departmentResults['officerHours']."</td><td>".$departmentResults['officerHours']."</td></tr>";
+									echo "<tr><td>".$departmentResults['officerName']."</td><td>".trim(str_ireplace("?", "'",$departmentResults['department']))."</td><td>".$departmentResults['officerHours']."</td><td>".$departmentResults['detailDate']."</td></tr>";
 								
 						}
 		
